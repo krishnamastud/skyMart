@@ -9,6 +9,7 @@ import MainProtected from "./protectedRoutes/MainProtected";
 import PublicProtected from "./protectedRoutes/PublicProtected";
 import ShopPage from "../../features/shop/ui/page/ShopPage";
 import AboutPage from "../../shared/ui/page/AboutPage";
+import CartPage from "../../features/cart/ui/page/CartPage";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: "about",
             element: <AboutPage />,
+          },
+          {
+            path: "cart",
+            element: <CartPage />,
           },
         ],
       },

@@ -1,212 +1,62 @@
-import React, { useState } from "react";
-import {
-  ShoppingCart,
-  Star,
-  Truck,
-  ShieldCheck,
-  Minus,
-  Plus,
-} from "lucide-react";
+import React from "react";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "../../../../context/CartContext";
 
-const ProductCard = ({ product, onAddToCart }) => {
-  const [quantity, setQuantity] = useState(1);
-
-  const {
-    title,
-    description,
-    category,
-    price,
-    discountPercentage,
-    rating,
-    stock,
-    availabilityStatus,
-    shippingInformation,
-    warrantyInformation,
-    thumbnail,
-    brand,
-  } = product;
-
-  const discountedPrice =
-    price - (price * discountPercentage) / 100;
-
-  const handleIncrement = () => {
-    if (quantity < stock) {
-      setQuantity((prev) => prev + 1);
-    }
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity((prev) => prev - 1);
-    }
-  };
-
-  const handleAddToCart = () => {
-    onAddToCart({
-      ...product,
-      quantity,
-      discountedPrice,
-    });
-  };
+const ProductCard = ({ product }) => {
+  const { addToCart } = useCart();
 
   return (
-    <div className="group w-full max-w-xs overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
 
       {/* Image */}
-      <div className="relative h-48 bg-gray-50 p-4 flex items-center justify-center">
-
-        {discountPercentage > 0 && (
-          <span className="absolute left-3 top-3 rounded-full bg-indigo-600 px-2.5 py-1 text-[10px] font-semibold text-white">
-            {discountPercentage.toFixed(0)}% OFF
-          </span>
-        )}
-
-        <span
-          className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-medium ${
-            availabilityStatus === "In Stock"
-              ? "bg-green-50 text-green-600"
-              : "bg-red-50 text-red-600"
-          }`}
-        >
-          {availabilityStatus}
-        </span>
-
+      <div className="h-44 overflow-hidden rounded-xl bg-gray-50">
         <img
-          src={thumbnail}
-          alt={title}
-          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          src={product.thumbnail}
+          alt={product.title}
+          className="h-full w-full object-contain p-4 transition duration-300 hover:scale-105"
         />
       </div>
 
-      {/* Content */}
-      <div className="p-4">
+      {/* Category */}
+      <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-indigo-600">
+        {product.category}
+      </p>
 
-        {/* Category + Brand */}
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-indigo-600">
-            {category}
-          </span>
+      {/* Title */}
+      <h3 className="mt-1 truncate text-sm font-semibold text-gray-900">
+        {product.title}
+      </h3>
 
-          {brand && (
-            <span className="truncate text-[10px] text-gray-400">
-              {brand}
-            </span>
-          )}
-        </div>
+      {/* Brand */}
+      <p className="mt-1 text-xs text-gray-500">
+        {product.brand}
+      </p>
 
-        {/* Title */}
-        <h2 className="mt-1.5 line-clamp-1 text-base font-semibold text-gray-900">
-          {title}
-        </h2>
-
-        {/* Description */}
-        <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-gray-500">
-          {description}
+      {/* Price */}
+      <div className="mt-3 flex items-center justify-between">
+        <p className="text-lg font-bold text-gray-900">
+          ${product.price.toFixed(2)}
         </p>
 
-        {/* Rating */}
-        <div className="mt-3 flex items-center justify-between">
-
-          <div className="flex items-center gap-1 rounded-md bg-gray-50 px-2 py-1">
-            <Star
-              size={13}
-              className="fill-yellow-400 text-yellow-400"
-            />
-
-            <span className="text-xs font-medium">
-              {rating}
-            </span>
-          </div>
-
-          <span className="text-[10px] text-gray-400">
-            {stock} available
-          </span>
-
-        </div>
-
-        {/* Price */}
-        <div className="mt-3 flex items-center gap-2">
-
-          <span className="text-xl font-bold text-gray-900">
-            ${discountedPrice.toFixed(2)}
-          </span>
-
-          <span className="text-xs text-gray-400 line-through">
-            ${price.toFixed(2)}
-          </span>
-
-        </div>
-
-        {/* Product Info */}
-        <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-3">
-
-          <div className="flex items-center gap-2 text-[10px] text-gray-500">
-            <Truck
-              size={13}
-              className="shrink-0 text-indigo-600"
-            />
-
-            <span className="truncate">
-              {shippingInformation}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 text-[10px] text-gray-500">
-            <ShieldCheck
-              size={13}
-              className="shrink-0 text-indigo-600"
-            />
-
-            <span className="truncate">
-              {warrantyInformation}
-            </span>
-          </div>
-
-        </div>
-
-        {/* Cart */}
-        <div className="mt-3 flex gap-2">
-
-          {/* Quantity */}
-          <div className="flex items-center rounded-lg border border-gray-200 bg-gray-50">
-
-            <button
-              type="button"
-              onClick={handleDecrement}
-              disabled={quantity === 1}
-              className="flex h-9 w-8 items-center justify-center text-gray-600 hover:text-indigo-600 disabled:opacity-40"
-            >
-              <Minus size={14} />
-            </button>
-
-            <span className="w-6 text-center text-xs font-semibold">
-              {quantity}
-            </span>
-
-            <button
-              type="button"
-              onClick={handleIncrement}
-              disabled={quantity >= stock}
-              className="flex h-9 w-8 items-center justify-center text-gray-600 hover:text-indigo-600 disabled:opacity-40"
-            >
-              <Plus size={14} />
-            </button>
-
-          </div>
-
-          {/* Add To Cart */}
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:from-indigo-700 hover:to-violet-700 active:scale-[0.98]"
-          >
-            <ShoppingCart size={15} />
-            Add to Cart
-          </button>
-
-        </div>
-
+        <span className="text-xs text-gray-500">
+          {product.stock} left
+        </span>
       </div>
+
+      {/* Add to cart */}
+      <button
+        type="button"
+        onClick={() => addToCart(product)}
+        disabled={product.stock === 0}
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:from-indigo-700 hover:to-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <ShoppingCart size={17} />
+
+        {product.stock === 0
+          ? "Out of Stock"
+          : "Add to Cart"}
+      </button>
+
     </div>
   );
 };

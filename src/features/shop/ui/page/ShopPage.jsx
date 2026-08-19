@@ -29,24 +29,20 @@ const ShopPage = () => {
       </div>
       <div className="p-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {
-        productsCategoryData?.products.length > 0 ? productsCategoryData?.products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={(product) => console.log(product)
-
-            }
-          />
-        )) : data?.products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={(product) => console.log(product)
-
-            }
-          />
-        ))
-        }
+  productsCategoryData?.products?.length > 0
+    ? productsCategoryData.products.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+        />
+      ))
+    : data?.products?.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+        />
+      ))
+}
       </div>
     </div>
   );

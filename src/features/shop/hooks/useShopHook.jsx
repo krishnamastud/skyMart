@@ -6,6 +6,8 @@ export const useAllProducts = (search) => {
     queryKey: ['products', search],
     queryFn: () => getAllProducts(search),
   });
+  console.log(data);
+  
   return { data };
 };
 
@@ -22,5 +24,6 @@ export const useProductsByCategory = (category) => {
         queryKey: ['productsByCategory', category],
         queryFn: () => getProductsByCategory(category),
     });
+
     return { data };
 }

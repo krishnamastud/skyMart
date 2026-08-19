@@ -1,16 +1,15 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router";
-import {
-  ShoppingCart,
-  LogOut,
-  User,
-  ChevronDown,
-} from "lucide-react";
+import { ShoppingCart, LogOut, User, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
+import { useCart } from "../../../context/CartContext";
 
 const Navbar = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const { cartItems } = useCart();
+
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const navItems = [
     {
@@ -31,14 +30,9 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-200/80 bg-white/95 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
         <div className="flex h-[72px] items-center justify-between">
-
           {/* ================= LOGO ================= */}
-          <NavLink
-            to="/main"
-            className="group flex items-center gap-3"
-          >
+          <NavLink to="/main" className="group flex items-center gap-3">
             {/* Logo */}
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-sm font-bold text-white shadow-md shadow-indigo-200 transition-transform duration-200 group-hover:scale-105">
               L
@@ -58,7 +52,6 @@ const Navbar = () => {
 
           {/* ================= NAVIGATION ================= */}
           <div className="hidden items-center gap-1 rounded-xl border border-gray-100 bg-gray-50/70 p-1 md:flex">
-
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
@@ -75,22 +68,17 @@ const Navbar = () => {
                 {item.name}
               </NavLink>
             ))}
-
           </div>
 
           {/* ================= RIGHT SIDE ================= */}
           <div className="flex items-center gap-2 sm:gap-3">
-
             {/* User */}
             <button
               type="button"
               className="hidden items-center gap-2 rounded-xl px-3 py-2 text-left transition hover:bg-gray-50 sm:flex"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-50">
-                <User
-                  size={17}
-                  className="text-indigo-600"
-                />
+                <User size={17} className="text-indigo-600" />
               </div>
 
               <div className="hidden lg:block">
@@ -98,9 +86,7 @@ const Navbar = () => {
                   Username
                 </p>
 
-                <p className="text-[10px] text-gray-400">
-                  Account
-                </p>
+                <p className="text-[10px] text-gray-400">Account</p>
               </div>
 
               <ChevronDown
@@ -123,8 +109,8 @@ const Navbar = () => {
               <ShoppingCart size={19} />
 
               {/* Cart Badge */}
-              <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-1 text-[9px] font-bold text-white shadow-sm">
-                2
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white">
+                {cartCount}
               </span>
             </NavLink>
 
@@ -133,11 +119,11 @@ const Navbar = () => {
 
             {/* Logout */}
             <button
-            onClick={() => {
-                localStorage.removeItem("loggedInUser")
-                navigate("/")
-                toast.success("Logout successful")
-            }}
+              onClick={() => {
+                localStorage.removeItem("loggedInUser");
+                navigate("/");
+                toast.success("Logout successful");
+              }}
               type="button"
               className="group flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 transition-all duration-200 hover:border-red-100 hover:bg-red-50 hover:text-red-600"
             >
@@ -146,15 +132,10 @@ const Navbar = () => {
                 className="transition-transform duration-200 group-hover:-translate-x-0.5"
               />
 
-              <span className="hidden lg:block">
-                Logout
-              </span>
+              <span className="hidden lg:block">Logout</span>
             </button>
-
           </div>
-
         </div>
-
       </div>
     </nav>
   );
